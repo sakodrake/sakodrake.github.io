@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nate Lacandazo — Portfolio</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0a0f;
+      --surface: #0f0f1a;
+      --border: #1e1e3a;
+      --text: #e8e8f0;
+      --muted: #6b6b8a;
+      --green: #00ff88;
+      --cyan: #00d4ff;
+      --purple: #a855f7;
+      --pink: #ff3366;
+      --glow-green: 0 0 20px rgba(0,255,136,0.3);
+      --glow-cyan: 0 0 20px rgba(0,212,255,0.3);
+      --radius: 12px;
+      --max-w: 760px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      font-size: 16px;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,255,136,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,255,136,0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    #particles { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+    nav, section, footer { position: relative; z-index: 1; }
+
+    /* ── GUI Nav ── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(10,10,15,0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px;
+    }
+    nav .inner {
+      max-width: var(--max-w); margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 56px;
+    }
+    nav .logo {
+      font-weight: 700; font-size: 15px; color: var(--green);
+      text-decoration: none; font-family: 'Courier New', monospace;
+      text-shadow: var(--glow-green); letter-spacing: 0.05em;
+    }
+    nav .logo::before { content: '> '; opacity: 0.6; }
+    nav .nav-right { display: flex; align-items: center; gap: 24px; }
+    nav ul { list-style: none; display: flex; gap: 28px; }
+    nav ul a {
+      font-size: 13px; color: var(--muted); text-decoration: none;
+      transition: color 0.2s, text-shadow 0.2s; letter-spacing: 0.03em; font-weight: 500;
+    }
+    nav ul a:hover { color: var(--cyan); text-shadow: var(--glow-cyan); }
+
+    .nav-term-btn {
+      background: rgba(0,255,136,0.07);
+      border: 1px solid rgba(0,255,136,0.22);
+      color: var(--green); font-size: 11px;
+      font-family: 'Courier New', monospace; font-weight: 700;
+      letter-spacing: 0.08em; padding: 6px 14px; border-radius: 6px;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .nav-term-btn::before { content: '$ '; opacity: 0.5; }
+    .nav-term-btn:hover { background: rgba(0,255,136,0.15); box-shadow: 0 0 14px rgba(0,255,136,0.2); }
+
+    /* ── GUI Sections ── */
+    section { padding: 96px 24px; }
+    section .inner { max-width: var(--max-w); margin: 0 auto; }
+    #hero { padding-top: 120px; padding-bottom: 100px; }
+
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 12px; font-weight: 600; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--green);
+      background: rgba(0,255,136,0.08); border: 1px solid rgba(0,255,136,0.2);
+      padding: 6px 14px; border-radius: 99px; margin-bottom: 28px;
+      font-family: 'Courier New', monospace;
+    }
+    .hero-badge .dot {
+      width: 6px; height: 6px; background: var(--green); border-radius: 50%;
+      animation: pulse 2s ease-in-out infinite; box-shadow: 0 0 6px var(--green);
+    }
+    #hero h1 { font-size: clamp(38px,7vw,60px); font-weight: 800; line-height: 1.05; letter-spacing: -0.03em; margin-bottom: 24px; }
+    #hero h1 .name { background: linear-gradient(135deg, var(--cyan) 0%, var(--purple) 50%, var(--green) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    #hero p { font-size: 18px; color: var(--muted); max-width: 500px; margin-bottom: 40px; line-height: 1.7; }
+    .cursor { display: inline-block; width: 2px; height: 1.1em; background: var(--green); margin-left: 4px; vertical-align: middle; animation: blink 1s step-end infinite; box-shadow: 0 0 8px var(--green); }
+    .cta-row { display: flex; gap: 12px; flex-wrap: wrap; }
+    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; border-radius: 8px; font-size: 14px; font-weight: 600; text-decoration: none; transition: all 0.2s; cursor: pointer; border: none; letter-spacing: 0.02em; }
+    .btn-primary { background: linear-gradient(135deg, var(--green), var(--cyan)); color: #0a0a0f; }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,255,136,0.35); }
+    .btn-secondary { background: transparent; color: var(--text); border: 1px solid var(--border); }
+    .btn-secondary:hover { border-color: var(--cyan); color: var(--cyan); box-shadow: var(--glow-cyan); transform: translateY(-2px); }
+
+    .section-label { font-size: 11px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--green); font-family: 'Courier New', monospace; margin-bottom: 10px; }
+    .section-label::before { content: '// '; opacity: 0.5; }
+    .section-title { font-size: 30px; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 36px; color: var(--text); }
+
+    #about { border-top: 1px solid var(--border); }
+    #about p { color: var(--muted); font-size: 16px; margin-bottom: 18px; max-width: 620px; line-height: 1.75; }
+    #about strong { color: var(--cyan); font-weight: 600; }
+    .skill-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 28px; }
+    .chip { font-size: 12px; font-weight: 600; padding: 5px 12px; border-radius: 6px; font-family: 'Courier New', monospace; letter-spacing: 0.04em; }
+    .chip-green  { background: rgba(0,255,136,0.1);  color: var(--green);  border: 1px solid rgba(0,255,136,0.25); }
+    .chip-cyan   { background: rgba(0,212,255,0.1);  color: var(--cyan);   border: 1px solid rgba(0,212,255,0.25); }
+    .chip-purple { background: rgba(168,85,247,0.1); color: var(--purple); border: 1px solid rgba(168,85,247,0.25); }
+    .chip-pink   { background: rgba(255,51,102,0.1); color: var(--pink);   border: 1px solid rgba(255,51,102,0.25); }
+
+    #projects { border-top: 1px solid var(--border); }
+    .projects-grid { display: grid; gap: 16px; }
+    .project-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px; transition: all 0.25s; position: relative; overflow: hidden; }
+    .project-card::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg,rgba(0,255,136,0.04) 0%,transparent 60%); opacity: 0; transition: opacity 0.25s; }
+    .project-card:hover::before { opacity: 1; }
+    .project-card:hover { border-color: rgba(0,255,136,0.3); box-shadow: 0 0 30px rgba(0,255,136,0.08), inset 0 1px 0 rgba(0,255,136,0.1); transform: translateY(-2px); }
+    .project-card h3 { font-size: 17px; font-weight: 700; margin-bottom: 10px; color: var(--text); }
+    .project-card p { font-size: 14px; color: var(--muted); margin-bottom: 18px; line-height: 1.6; }
+    .tag-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 18px; }
+    .tag { font-size: 11px; font-weight: 600; font-family: 'Courier New', monospace; color: var(--green); background: rgba(0,255,136,0.08); border: 1px solid rgba(0,255,136,0.2); padding: 3px 10px; border-radius: 4px; letter-spacing: 0.04em; }
+    .card-links { display: flex; gap: 16px; }
+    .card-link { font-size: 13px; font-weight: 600; color: var(--cyan); text-decoration: none; transition: color 0.15s, text-shadow 0.15s; }
+    .card-link:hover { color: var(--green); text-shadow: var(--glow-green); }
+
+    #journey { border-top: 1px solid var(--border); }
+    .journey-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 36px; position: relative; overflow: hidden; }
+    .journey-card::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--purple), var(--cyan), var(--green)); }
+    .journey-card p { color: var(--muted); font-size: 16px; max-width: 560px; line-height: 1.75; margin-bottom: 16px; }
+    .journey-card p:last-of-type { margin-bottom: 24px; }
+
+    #contact { border-top: 1px solid var(--border); }
+    #contact .section-title { margin-bottom: 8px; }
+    #contact .subtitle { color: var(--muted); font-size: 16px; margin-bottom: 36px; }
+    .contact-links { display: flex; flex-wrap: wrap; gap: 12px; }
+
+    footer { border-top: 1px solid var(--border); padding: 28px 24px; text-align: center; font-size: 13px; color: var(--muted); font-family: 'Courier New', monospace; }
+    footer a { color: var(--green); text-decoration: none; }
+
+    /* ── Animations ── */
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(.8)} }
+    @keyframes blink  { 0%,100%{opacity:1} 50%{opacity:0} }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+    .fade-up   { animation: fadeUp 0.6s ease both; }
+    .fade-up-2 { animation: fadeUp 0.6s 0.1s ease both; }
+    .fade-up-3 { animation: fadeUp 0.6s 0.2s ease both; }
+    .fade-up-4 { animation: fadeUp 0.6s 0.3s ease both; }
+    .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.5s ease, transform 0.5s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* ══════════════════════════════════════════
+       TERMINAL — FULL SCREEN DEFAULT
+    ══════════════════════════════════════════ */
+    #term-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      background: #030305;
+      background-image: repeating-linear-gradient(
+        0deg,
+        rgba(0,0,0,0.18) 0px,
+        rgba(0,0,0,0.18) 1px,
+        transparent 1px,
+        transparent 3px
+      );
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.22s ease;
+    }
+    #term-overlay.active { opacity: 1; pointer-events: all; }
+
+    .term-window {
+      width: 100%; height: 100%;
+      display: flex; flex-direction: column;
+    }
+
+    /* Title bar */
+    .term-titlebar {
+      background: #0e0e0e;
+      border-bottom: 1px solid #181818;
+      padding: 0 20px;
+      height: 40px;
+      display: flex; align-items: center; gap: 12px;
+      flex-shrink: 0; user-select: none;
+    }
+    .term-dots { display: flex; gap: 7px; }
+    .term-dot { width: 13px; height: 13px; border-radius: 50%; cursor: default; }
+    .dot-red    { background: #ff5f57; }
+    .dot-yellow { background: #febc2e; }
+    .dot-green-mac { background: #28c840; }
+    #term-title-path {
+      flex: 1; text-align: center; font-size: 12px;
+      color: #383838; font-family: 'Courier New', monospace;
+      letter-spacing: 0.04em;
+    }
+    .term-gui-btn {
+      background: rgba(0,255,136,0.07);
+      border: 1px solid rgba(0,255,136,0.18);
+      color: #00ff88; font-size: 11px;
+      font-family: 'Courier New', monospace; font-weight: 700;
+      letter-spacing: 0.06em; padding: 4px 13px; border-radius: 5px;
+      cursor: pointer; transition: all 0.15s;
+    }
+    .term-gui-btn:hover { background: rgba(0,255,136,0.14); box-shadow: 0 0 12px rgba(0,255,136,0.15); }
+
+    /* Output body */
+    .term-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px 30px 12px;
+      scroll-behavior: smooth;
+      font-family: 'Courier New', 'Consolas', 'Menlo', monospace;
+    }
+    .term-body::-webkit-scrollbar { width: 4px; }
+    .term-body::-webkit-scrollbar-track { background: transparent; }
+    .term-body::-webkit-scrollbar-thumb { background: #1e1e1e; border-radius: 2px; }
+
+    /* ASCII art */
+    .term-ascii {
+      color: #00ff88;
+      font-size: 10px;
+      line-height: 1.15;
+      white-space: pre;
+      text-shadow: 0 0 14px rgba(0,255,136,0.3);
+      margin-bottom: 8px;
+      display: block;
+    }
+    .term-sys-line { font-size: 12px; font-family: 'Courier New', monospace; margin-bottom: 4px; }
+
+    /* Command entries */
+    .term-entry { margin-bottom: 4px; font-family: 'Courier New', monospace; }
+    .term-cmd-line { font-size: 13.5px; margin-bottom: 4px; line-height: 1.4; }
+    .term-output {
+      font-size: 13px;
+      line-height: 1.72;
+      padding-left: 0;
+      white-space: pre-wrap;
+      word-break: break-word;
+      margin-bottom: 6px;
+    }
+
+    /* Prompt parts */
+    .tp-user   { color: #00ff88; }
+    .tp-at     { color: #2a2a2a; }
+    .tp-host   { color: #00d4ff; }
+    .tp-colon  { color: #2a2a2a; }
+    .tp-path   { color: #00d4ff; font-weight: 700; }
+    .tp-dollar { color: #444; }
+    .tp-cmd    { color: #e8e8f0; margin-left: 6px; }
+
+    /* Output colors */
+    .o-green  { color: #00ff88; }
+    .o-cyan   { color: #00d4ff; }
+    .o-purple { color: #a855f7; }
+    .o-pink   { color: #ff3366; }
+    .o-white  { color: #cccccc; }
+    .o-muted  { color: #666; }
+    .o-dim    { color: #2e2e2e; }
+    .o-red    { color: #ff5f57; }
+    .o-head   { color: #00d4ff; font-size: 14px; font-weight: 700; }
+    .o-winner { display: inline-block; font-size: 10px; font-weight: 700; color: #00ff88; background: rgba(0,255,136,0.1); border: 1px solid rgba(0,255,136,0.3); padding: 1px 7px; border-radius: 3px; margin-left: 8px; letter-spacing: 0.04em; vertical-align: middle; }
+    .o-link   { color: #00d4ff; text-decoration: none; }
+    .o-link:hover { text-decoration: underline; text-shadow: 0 0 8px rgba(0,212,255,0.4); }
+
+    /* ls colored items */
+    .ls-dir  { color: #00d4ff; font-weight: 700; }
+    .ls-md   { color: #00ff88; }
+    .ls-txt  { color: #aaaaaa; }
+    .ls-pdf  { color: #ff3366; }
+    .ls-hide { color: #444; }
+
+    /* Input row */
+    .term-input-row {
+      border-top: 1px solid #111;
+      padding: 0 30px;
+      height: 48px;
+      display: flex; align-items: center; gap: 10px;
+      flex-shrink: 0;
+      background: #020202;
+    }
+    .term-input-prompt { font-size: 13.5px; font-family: 'Courier New', monospace; white-space: nowrap; user-select: none; }
+    #term-input {
+      flex: 1; background: none; border: none; outline: none;
+      color: #e8e8f0; font-size: 13.5px;
+      font-family: 'Courier New', 'Consolas', monospace;
+      caret-color: #00ff88;
+    }
+    #term-input::placeholder { color: #252525; }
+
+    /* Tab-completion hint bar */
+    .term-tab-hint {
+      padding: 6px 30px;
+      font-size: 12px;
+      font-family: 'Courier New', monospace;
+      color: #2a2a2a;
+      background: #020202;
+      border-top: 1px solid #0c0c0c;
+      flex-shrink: 0;
+    }
+
+    @media (max-width: 600px) {
+      section { padding: 72px 20px; }
+      #hero { padding-top: 80px; }
+      nav { padding: 0 16px; }
+      nav ul { gap: 16px; }
+      .journey-card { padding: 24px; }
+      .term-ascii { font-size: 6.5px; }
+      .term-body { padding: 14px 16px 8px; }
+      .term-input-row { padding: 0 16px; }
+      .term-tab-hint { padding: 5px 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="particles"></canvas>
+
+  <!-- ── GUI Nav ── -->
+  <nav>
+    <div class="inner">
+      <a href="#hero" class="logo">nate.sh</a>
+      <div class="nav-right">
+        <ul>
+          <li><a href="#about">About</a></li>
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#journey">Journey</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+        <button class="nav-term-btn" onclick="openTerminal()">terminal</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ── GUI Sections ── -->
+  <section id="hero">
+    <div class="inner">
+      <div class="hero-badge fade-up"><span class="dot"></span>Available for internships</div>
+      <h1 class="fade-up-2"><span class="greeting">Hi, I'm </span><br><span class="name">Nate Lacandazo</span></h1>
+      <p class="fade-up-3">CS student focused on cybersecurity — building things, breaking things, and documenting the ride.<span class="cursor"></span></p>
+      <div class="cta-row fade-up-4">
+        <a href="#projects" class="btn btn-primary">See my work</a>
+        <a href="#contact" class="btn btn-secondary">Get in touch</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="about">
+    <div class="inner">
+      <p class="section-label reveal">About</p>
+      <h2 class="section-title reveal">A bit about me</h2>
+      <p class="reveal">I'm a <strong>computer science student</strong> with a growing obsession with cybersecurity. I'm interested in how systems work — and how they fail. Whether it's writing a tool, understanding a vulnerability, or setting up a lab environment, I learn best by doing.</p>
+      <p class="reveal">Outside of coursework, I spend time on personal projects that let me go deeper than the classroom allows. I'm especially drawn to <strong>network security, ethical hacking, and secure software development</strong>.</p>
+      <p class="reveal">I also document my journey as a student on Instagram — the learning process, the challenges, and the small wins. I started it because I wished more people had done the same when I was getting started.</p>
+      <div class="skill-chips reveal">
+        <span class="chip chip-green">Python</span><span class="chip chip-cyan">C++</span><span class="chip chip-purple">Bash</span>
+        <span class="chip chip-green">PowerShell</span><span class="chip chip-cyan">Kali Linux</span><span class="chip chip-pink">CTF</span>
+        <span class="chip chip-purple">Metasploit</span><span class="chip chip-green">Burp Suite</span><span class="chip chip-cyan">Wireshark</span><span class="chip chip-purple">Splunk</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="projects">
+    <div class="inner">
+      <p class="section-label reveal">Work</p>
+      <h2 class="section-title reveal">Projects</h2>
+      <div class="projects-grid">
+        <div class="project-card reveal">
+          <h3>Project Scalpel <span style="font-size:12px;font-weight:500;color:var(--muted);margin-left:8px;">Apr. 2026</span></h3>
+          <p>A 3-tiered hybrid deception honeypot that achieved a 97.3% escalation score from the Army Research Lab. Built a "second-brain" for Tier 2 intelligence using AWS Bedrock, and a lookup table that matched 97.3% of Red Team TTPs.</p>
+          <div class="tag-row"><span class="tag">Cowrie</span><span class="tag">AWS Bedrock</span><span class="tag">Paramiko</span><span class="tag">Honeypot</span><span class="tag">Threat Intel</span></div>
+          <div class="card-links"><a href="https://github.com/sakodrake" target="_blank" rel="noopener" class="card-link">GitHub →</a></div>
+        </div>
+        <div class="project-card reveal">
+          <h3>LingoLens <span style="font-size:11px;font-weight:700;color:var(--green);margin-left:8px;background:rgba(0,255,136,0.1);border:1px solid rgba(0,255,136,0.25);padding:2px 8px;border-radius:4px;">🏆 Best Use of Gemini API</span></h3>
+          <p style="margin-top:10px;">An iOS app that reinforces language learning through real-world object recognition. Powered by Google Gemini's vision model, MongoDB for vocab storage, and ElevenLabs for bilingual audio.</p>
+          <div class="tag-row"><span class="tag">Swift</span><span class="tag">SwiftUI</span><span class="tag">AVFoundation</span><span class="tag">Gemini API</span><span class="tag">MongoDB</span><span class="tag">ElevenLabs</span></div>
+          <div class="card-links"><a href="https://github.com/sakodrake" target="_blank" rel="noopener" class="card-link">GitHub →</a></div>
+        </div>
+        <div class="project-card reveal">
+          <h3>Viralytics <span style="font-size:12px;font-weight:500;color:var(--muted);margin-left:8px;">Mar. 2026</span></h3>
+          <p>A full-stack personalization pipeline transforming TikTok trend datasets into structured video concepts. Integrates Gemini API to generate hooks, scripts, and captions — accelerating content ideation by 10x.</p>
+          <div class="tag-row"><span class="tag">TypeScript</span><span class="tag">Node.js</span><span class="tag">Prisma</span><span class="tag">Gemini API</span><span class="tag">Full-Stack</span></div>
+          <div class="card-links"><a href="https://github.com/sakodrake" target="_blank" rel="noopener" class="card-link">GitHub →</a></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="journey">
+    <div class="inner">
+      <p class="section-label reveal">Content</p>
+      <h2 class="section-title reveal">The journey</h2>
+      <div class="journey-card reveal">
+        <p>I document my life as a CS and cybersecurity student on Instagram — the real stuff. Studying, building projects, figuring things out, and sharing resources I wish I'd had earlier.</p>
+        <p>If you're on a similar path or just curious about what the student grind actually looks like, come follow along.</p>
+        <a href="https://instagram.com/your_handle" target="_blank" rel="noopener" class="btn btn-secondary">Follow on Instagram →</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="inner">
+      <p class="section-label reveal">Contact</p>
+      <h2 class="section-title reveal">Let's connect</h2>
+      <p class="subtitle reveal">Open to internships, collaborations, or just a good conversation about security.</p>
+      <div class="contact-links reveal">
+        <a href="mailto:natelacandazo@gmail.com" class="btn btn-primary">Email me</a>
+        <a href="https://github.com/sakodrake" target="_blank" rel="noopener" class="btn btn-secondary">GitHub</a>
+        <a href="https://instagram.com/your_handle" target="_blank" rel="noopener" class="btn btn-secondary">Instagram</a>
+        <a href="https://linkedin.com/in/nate-lacandazo" target="_blank" rel="noopener" class="btn btn-secondary">LinkedIn</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>Built by <a href="mailto:natelacandazo@gmail.com">Nate Lacandazo</a> · <span style="color:var(--green)">2026</span></p>
+  </footer>
+
+  <!-- ══════════════════════════════════════════
+       TERMINAL — default view (starts active)
+  ══════════════════════════════════════════ -->
+  <div id="term-overlay" class="active">
+    <div class="term-window">
+
+      <div class="term-titlebar">
+        <div class="term-dots">
+          <span class="term-dot dot-red"></span>
+          <span class="term-dot dot-yellow"></span>
+          <span class="term-dot dot-green-mac"></span>
+        </div>
+        <span id="term-title-path">nate@portfolio: ~</span>
+        <button class="term-gui-btn" onclick="openGUI()">⬡ GUI mode</button>
+      </div>
+
+      <div class="term-body" id="term-body"></div>
+
+      <div class="term-input-row">
+        <span class="term-input-prompt" id="term-prompt-label"></span>
+        <input type="text" id="term-input" autocomplete="off" spellcheck="false" placeholder="type a command..." />
+      </div>
+
+      <div class="term-tab-hint">tab to autocomplete &nbsp;·&nbsp; ↑↓ history &nbsp;·&nbsp; type <span style="color:#00ff88">help</span> for commands &nbsp;·&nbsp; <span style="color:#00ff88">gui</span> to switch modes</div>
+
+    </div>
+  </div>
+
+  <script>
+    /* ══════════════════════════════════════════
+       PARTICLES
+    ══════════════════════════════════════════ */
+    const canvas = document.getElementById('particles');
+    const ctx    = canvas.getContext('2d');
+    function resizeCanvas() { canvas.width = innerWidth; canvas.height = innerHeight; }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+    const pColors = ['rgba(0,255,136,','rgba(0,212,255,','rgba(168,85,247,'];
+    const parts   = Array.from({length:60}, () => ({
+      x: Math.random()*innerWidth, y: Math.random()*innerHeight,
+      r: Math.random()*1.5+0.3,
+      vx: (Math.random()-.5)*.3, vy: (Math.random()-.5)*.3,
+      color: pColors[Math.floor(Math.random()*pColors.length)],
+      alpha: Math.random()*.5+.1,
+    }));
+    (function draw() {
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      for (const p of parts) {
+        p.x+=p.vx; p.y+=p.vy;
+        if(p.x<0) p.x=canvas.width;  if(p.x>canvas.width) p.x=0;
+        if(p.y<0) p.y=canvas.height; if(p.y>canvas.height) p.y=0;
+        ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+        ctx.fillStyle=p.color+p.alpha+')'; ctx.fill();
+      }
+      requestAnimationFrame(draw);
+    })();
+
+    /* ══════════════════════════════════════════
+       SCROLL REVEAL (GUI mode)
+    ══════════════════════════════════════════ */
+    const revObs = new IntersectionObserver(
+      es => es.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); }),
+      { threshold: 0.12 }
+    );
+    document.querySelectorAll('.reveal').forEach(el => revObs.observe(el));
+
+    /* ══════════════════════════════════════════
+       FILESYSTEM
+    ══════════════════════════════════════════ */
+    const FS = {
+      type: 'dir',
+      children: {
+        'about.txt': {
+          type:'file', date:'Jun 17 2026', size:712,
+          content:`<span class="o-cyan">NAME      </span>  Nate Lacandazo
+<span class="o-cyan">SCHOOL    </span>  University of Florida — Computer Engineering
+<span class="o-cyan">GRAD      </span>  May 2029
+<span class="o-cyan">GPA       </span>  <span class="o-green">3.5 / 4.0</span>
+<span class="o-cyan">FOCUS     </span>  Cybersecurity · Ethical Hacking · Network Security
+<span class="o-dim">────────────────────────────────────────────────</span>
+I'm interested in how systems work — and how they fail.
+Whether it's writing a tool, understanding a vulnerability,
+or setting up a lab, I learn best by doing.
+<span class="o-dim">────────────────────────────────────────────────</span>
+<span class="o-white">EXPERIENCE</span>
+  CSOC Intern @ Florida Digital Service    Dec 2024 – Jun 2025
+  CTF Competitor @ UF Security Info Team   Aug 2025 – Present
+<span class="o-dim">────────────────────────────────────────────────</span>
+<span class="o-green">●</span>  Open to internships`
+        },
+        'skills.txt': {
+          type:'file', date:'Jun 17 2026', size:420,
+          content:`<span class="o-green">LANGUAGES  </span>  Python  ·  C++  ·  Bash  ·  PowerShell
+<span class="o-cyan">SECURITY   </span>  Kali Linux  ·  Metasploit  ·  Burp Suite  ·  Wireshark  ·  Splunk  ·  Cowrie
+<span class="o-purple">PLATFORMS  </span>  Linux  ·  Windows  ·  VMware  ·  AWS
+<span class="o-pink">DEV        </span>  Swift  ·  TypeScript  ·  Node.js  ·  MongoDB  ·  Prisma
+<span class="o-muted">COURSEWORK </span>  Penetration Testing · Image Processing / CV · Linear Algebra
+             Discrete Structures · Differential Equations`
+        },
+        'contact.txt': {
+          type:'file', date:'Jun 17 2026', size:280,
+          content:`<span class="o-white">email    </span>  <a href="mailto:natelacandazo@gmail.com" class="o-link">natelacandazo@gmail.com</a>
+<span class="o-white">github   </span>  <a href="https://github.com/sakodrake" class="o-link" target="_blank">github.com/sakodrake</a>
+<span class="o-white">linkedin </span>  <a href="https://linkedin.com/in/nate-lacandazo" class="o-link" target="_blank">linkedin.com/in/nate-lacandazo</a>
+<span class="o-white">instagram</span>  <a href="https://instagram.com/your_handle" class="o-link" target="_blank">@your_handle</a>
+<span class="o-dim">────────────────────────────────────────────────</span>
+<span class="o-green">Open to internships, collabs, and security convos.</span>`
+        },
+        '.profile': {
+          type:'file', date:'Jun 17 2026', size:128, hidden:true,
+          content:`export PS1="\\u@portfolio:\\w$ "
+export EDITOR=vim
+alias ll='ls -la'
+alias ..='cd ..'
+alias cls='clear'
+
+# You found this. Nice work.`
+        },
+        '.bash_history': {
+          type:'file', date:'Jun 17 2026', size:256, hidden:true,
+          content:`sudo rm -rf /
+git push --force main
+ssh root@192.168.1.1
+python3 exploit.py --target localhost
+cat /etc/shadow
+chmod 777 /
+nmap -A -T4 192.168.1.0/24
+hashcat -m 0 hash.txt rockyou.txt`
+        },
+        'projects': {
+          type:'dir', date:'Jun 17 2026', size:192,
+          children: {
+            '01-scalpel.md': {
+              type:'file', date:'Apr 15 2026', size:648,
+              content:`<span class="o-head"># Project Scalpel</span>
+<span class="o-muted">Date:   Apr. 2026</span>
+<span class="o-muted">Stack:  Cowrie · AWS Bedrock · Paramiko</span>
+<span class="o-dim">────────────────────────────────────────────────</span>
+<span class="o-white">Overview</span>
+  3-tiered hybrid deception honeypot. Achieved a 97.3%
+  escalation score from the Army Research Lab.
+
+<span class="o-white">Architecture</span>
+  <span class="o-green">Tier 1</span>  Cowrie SSH/Telnet honeypot for initial deception
+  <span class="o-green">Tier 2</span>  AWS Bedrock "second-brain" catches edge commands
+  <span class="o-green">Tier 3</span>  Lookup table matched 97.3% of Red Team TTPs
+
+<span class="o-white">Result</span>
+  97.3% escalation score — Army Research Lab evaluation
+<span class="o-dim">────────────────────────────────────────────────</span>
+<a href="https://github.com/sakodrake" class="o-link" target="_blank">→ github.com/sakodrake</a>`
+            },
+            '02-lingolens.md': {
+              type:'file', date:'Feb 28 2026', size:592,
+              content:`<span class="o-head"># LingoLens</span>  <span class="o-winner">🏆 Best Use of Gemini API</span>
+<span class="o-muted">Date:   Feb. 2026</span>
+<span class="o-muted">Stack:  Swift · SwiftUI · AVFoundation · Gemini API · MongoDB · ElevenLabs</span>
+<span class="o-dim">────────────────────────────────────────────────</span>
+<span class="o-white">Overview</span>
+  iOS app for language learning through real-world
+  object recognition. Point your camera, get vocabulary.
+
+<span class="o-white">Pipeline</span>
+  <span class="o-green">Camera  </span>  AVFoundation captures live video input
+  <span class="o-green">AI      </span>  Gemini vision model identifies objects
+  <span class="o-green">Voice   </span>  ElevenLabs delivers bilingual pronunciation
+  <span class="o-green">Storage </span>  MongoDB for vocabulary and user IDs
+<span class="o-dim">────────────────────────────────────────────────</span>
+<a href="https://github.com/sakodrake" class="o-link" target="_blank">→ github.com/sakodrake</a>`
+            },
+            '03-viralytics.md': {
+              type:'file', date:'Mar 20 2026', size:528,
+              content:`<span class="o-head"># Viralytics</span>
+<span class="o-muted">Date:   Mar. 2026</span>
+<span class="o-muted">Stack:  TypeScript · Node.js · Prisma · Gemini API</span>
+<span class="o-dim">────────────────────────────────────────────────</span>
+<span class="o-white">Overview</span>
+  Full-stack pipeline transforming TikTok trend data
+  into structured video concepts for creators.
+
+<span class="o-white">Features</span>
+  <span class="o-green">Trends  </span>  Surfaces top-performing niche videos
+  <span class="o-green">AI      </span>  Gemini generates hooks, scripts, captions
+  <span class="o-green">Persona </span>  Adapts to style, effort, camera prefs
+  <span class="o-green">Impact  </span>  Content ideation accelerated by 10x
+<span class="o-dim">────────────────────────────────────────────────</span>
+<a href="https://github.com/sakodrake" class="o-link" target="_blank">→ github.com/sakodrake</a>`
+            }
+          }
+        },
+        'journey': {
+          type:'dir', date:'Jun 17 2026', size:128,
+          children: {
+            'instagram.txt': {
+              type:'file', date:'Jun 17 2026', size:396,
+              content:`I document my life as a CS and cybersecurity student
+on Instagram — the real stuff.
+<span class="o-dim">────────────────────────────────────────────────</span>
+<span class="o-white">Topics</span>
+  Studying and coursework breakdowns
+  Building and debugging projects
+  CTF writeups and walkthroughs
+  Resources I wish I'd had earlier
+<span class="o-dim">────────────────────────────────────────────────</span>
+<a href="https://instagram.com/your_handle" class="o-link" target="_blank">→ instagram.com/your_handle</a>`
+            }
+          }
+        }
+      }
+    };
+
+    /* ══════════════════════════════════════════
+       TERMINAL STATE
+    ══════════════════════════════════════════ */
+    let cwd     = [];          // path segments from root, [] = home
+    let cmdHist = [];
+    let histIdx = -1;
+    let booted  = false;
+
+    const termBody  = document.getElementById('term-body');
+    const termInput = document.getElementById('term-input');
+
+    /* ── Helpers ── */
+    function getNode(pathArr) {
+      let node = FS;
+      for (const seg of pathArr) {
+        if (!node.children || !node.children[seg]) return null;
+        node = node.children[seg];
+      }
+      return node;
+    }
+    function getCurrent()  { return getNode(cwd); }
+    function cwdDisplay()  { return cwd.length === 0 ? '~' : '~/' + cwd.join('/'); }
+
+    function promptHTML() {
+      const p = cwdDisplay();
+      return `<span class="tp-user">nate</span><span class="tp-at">@</span><span class="tp-host">portfolio</span><span class="tp-colon">:</span><span class="tp-path">${p}</span><span class="tp-dollar"> $</span>`;
+    }
+
+    function refreshPromptLabel() {
+      document.getElementById('term-prompt-label').innerHTML = promptHTML();
+      document.getElementById('term-title-path').textContent = `nate@portfolio: ${cwdDisplay()}`;
+    }
+
+    function appendEntry(rawCmd, html, pHTML) {
+      const el = document.createElement('div');
+      el.className = 'term-entry';
+      el.innerHTML = `<div class="term-cmd-line">${pHTML || promptHTML()}<span class="tp-cmd">${escHtml(rawCmd)}</span></div>`
+                   + (html ? `<div class="term-output">${html}</div>` : '');
+      termBody.appendChild(el);
+      termBody.scrollTop = termBody.scrollHeight;
+    }
+
+    function appendSystem(html) {
+      const el = document.createElement('div');
+      el.className = 'term-entry';
+      el.innerHTML = `<div class="term-output">${html}</div>`;
+      termBody.appendChild(el);
+      termBody.scrollTop = termBody.scrollHeight;
+    }
+
+    function appendBlank() {
+      termBody.appendChild(document.createElement('br'));
+    }
+
+    function escHtml(s) {
+      return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+
+    /* ── ls output ── */
+    function colorName(name, node) {
+      if (node.type === 'dir')    return `<span class="ls-dir">${name}/</span>`;
+      if (name.endsWith('.md'))   return `<span class="ls-md">${name}</span>`;
+      if (name.endsWith('.pdf'))  return `<span class="ls-pdf">${name}</span>`;
+      if (name.startsWith('.'))   return `<span class="ls-hide">${name}</span>`;
+      return `<span class="ls-txt">${name}</span>`;
+    }
+
+    function lsSimple(node, showHidden) {
+      const entries = Object.entries(node.children)
+        .filter(([n, v]) => showHidden || !v.hidden)
+        .sort(([a],[b]) => a.localeCompare(b));
+      if (!entries.length) return '<span class="o-muted">(empty)</span>';
+      return entries.map(([n,v]) => colorName(n,v)).join('    ');
+    }
+
+    function lsLong(node, showHidden) {
+      const entries = Object.entries(node.children)
+        .filter(([n,v]) => showHidden || !v.hidden)
+        .sort(([a],[b]) => a.localeCompare(b));
+      const total = entries.length;
+      let lines = [`<span class="o-muted">total ${total}</span>`];
+      lines.push(`<span class="o-cyan">drwxr-xr-x</span>  <span class="o-muted">2 nate nate   128 Jun 17 2026</span> <span class="ls-dir">.</span>`);
+      lines.push(`<span class="o-cyan">drwxr-xr-x</span>  <span class="o-muted">3 root root    96 Jun 17 2026</span> <span class="ls-dir">..</span>`);
+      for (const [name, node] of entries) {
+        const perm  = node.type === 'dir' ? '<span class="o-cyan">drwxr-xr-x</span>' : '<span class="o-muted">-rw-r--r--</span>';
+        const size  = String(node.size || 128).padStart(4);
+        lines.push(`${perm}  <span class="o-muted">1 nate nate  ${size} ${node.date}</span> ${colorName(name, node)}`);
+      }
+      return lines.join('\n');
+    }
+
+    /* ══════════════════════════════════════════
+       COMMAND HANDLERS
+    ══════════════════════════════════════════ */
+    const HELP = `<span class="o-cyan">FILESYSTEM</span>
+  <span class="o-green">ls</span>                  list directory contents
+  <span class="o-green">ls -la</span>              detailed list (shows hidden files with -a)
+  <span class="o-green">ll</span>                  alias for ls -la
+  <span class="o-green">cd &lt;dir&gt;</span>            change directory
+  <span class="o-green">cd ..</span>               go up one level
+  <span class="o-green">cd ~</span>                go home
+  <span class="o-green">cat &lt;file&gt;</span>          display file contents
+  <span class="o-green">pwd</span>                 print working directory
+
+<span class="o-cyan">INFO</span>
+  <span class="o-green">whoami</span>              about me  (same as cat ~/about.txt)
+  <span class="o-green">clear</span>               clear the terminal
+  <span class="o-green">history</span>             show command history
+  <span class="o-green">help</span>                this help menu
+
+<span class="o-cyan">NAVIGATION</span>
+  <span class="o-green">gui</span>                 switch to GUI mode
+
+<span class="o-muted">tip: press Tab to autocomplete filenames</span>`;
+
+    function handleLs(args) {
+      const flags     = args.filter(a => a.startsWith('-')).join('');
+      const showLong  = flags.includes('l');
+      const showAll   = flags.includes('a');
+      const node      = getCurrent();
+      if (!node || node.type !== 'dir') return '<span class="o-red">ls: not a directory</span>';
+      return showLong ? lsLong(node, showAll) : lsSimple(node, showAll);
+    }
+
+    function handleCd(args) {
+      const target = (args[0] || '').replace(/\/+$/, '');
+      if (!target || target === '~') { cwd = []; return null; }
+      if (target === '..') {
+        if (cwd.length > 0) cwd = cwd.slice(0, -1);
+        return null;
+      }
+      const node = getCurrent();
+      if (!node || !node.children || !node.children[target]) {
+        return `<span class="o-red">cd: ${escHtml(target)}: No such file or directory</span>`;
+      }
+      if (node.children[target].type !== 'dir') {
+        return `<span class="o-red">cd: ${escHtml(target)}: Not a directory</span>`;
+      }
+      cwd = [...cwd, target];
+      return null;
+    }
+
+    function handleCat(args) {
+      if (!args[0]) return '<span class="o-red">cat: missing operand</span>';
+      const node = getCurrent();
+      // support paths like ~/about.txt or relative
+      let filename = args[0];
+      let lookNode = node;
+      if (filename.startsWith('~/')) {
+        filename = filename.slice(2);
+        lookNode = FS;
+      }
+      const file = lookNode.children && lookNode.children[filename];
+      if (!file)              return `<span class="o-red">cat: ${escHtml(args[0])}: No such file or directory</span>`;
+      if (file.type === 'dir') return `<span class="o-red">cat: ${escHtml(args[0])}: Is a directory</span>`;
+      return file.content;
+    }
+
+    function handleHistory() {
+      if (!cmdHist.length) return '<span class="o-muted">no commands in history</span>';
+      return cmdHist.slice().reverse().map((c,i) => `<span class="o-muted">${String(i+1).padStart(3)}</span>  ${escHtml(c)}`).join('\n');
+    }
+
+    /* Tab completion */
+    function getCompletions(partial) {
+      const node = getCurrent();
+      if (!node || node.type !== 'dir') return [];
+      return Object.keys(node.children)
+        .filter(n => n.startsWith(partial) && !node.children[n].hidden)
+        .sort();
+    }
+
+    /* ══════════════════════════════════════════
+       COMMAND DISPATCH
+    ══════════════════════════════════════════ */
+    function runCommand(raw) {
+      const trimmed = raw.trim();
+      if (!trimmed) { appendEntry('', null); return; }
+
+      cmdHist.push(trimmed); histIdx = -1;
+
+      const parts = trimmed.split(/\s+/);
+      const cmd   = parts[0].toLowerCase();
+      const args  = parts.slice(1);
+
+      switch (cmd) {
+        case 'ls':      appendEntry(trimmed, handleLs(args)); break;
+        case 'll':      appendEntry(trimmed, handleLs(['-la'])); break;
+        case 'cd': {
+          const prePrompt = promptHTML();
+          const out = handleCd(args);
+          appendEntry(trimmed, out, prePrompt);
+          refreshPromptLabel();
+          break;
+        }
+        case 'cat':     appendEntry(trimmed, handleCat(args)); break;
+        case 'pwd': {
+          const p = cwd.length === 0 ? '/home/nate' : '/home/nate/' + cwd.join('/');
+          appendEntry(trimmed, `<span class="o-white">${p}</span>`);
+          break;
+        }
+        case 'whoami':  appendEntry(trimmed, FS.children['about.txt'].content); break;
+        case 'clear':   termBody.innerHTML = ''; break;
+        case 'help':    appendEntry(trimmed, HELP); break;
+        case 'history': appendEntry(trimmed, handleHistory()); break;
+        case 'gui':     appendEntry(trimmed, '<span class="o-muted">switching to GUI mode...</span>'); setTimeout(openGUI, 300); break;
+
+        /* Easter eggs */
+        case 'sudo':       appendEntry(trimmed, '<span class="o-red">Permission denied. Nice try.</span>'); break;
+        case 'rm':         appendEntry(trimmed, '<span class="o-red">Permission denied. (Also, really?)</span>'); break;
+        case 'vim':        appendEntry(trimmed, '<span class="o-muted">Entering vim...\n\n<span class="o-red">fatal: cannot escape</span>\n\ntype <span class="o-green">:q!</span> ... just kidding, it does nothing.</span>'); break;
+        case 'nano':       appendEntry(trimmed, '<span class="o-muted">Better choice than vim. Still not available though.</span>'); break;
+        case 'python3':    appendEntry(trimmed, '<span class="o-muted">Python 3.12.0 (main)\nType "help" for more info.\n>>><span class="o-red"> (this is a terminal emulator, not a REPL)</span></span>'); break;
+        case 'git':        appendEntry(trimmed, '<span class="o-red">fatal: not a git repository (or any parent directories)</span>'); break;
+        case 'ssh':        appendEntry(trimmed, `<span class="o-muted">ssh: connect to host ${escHtml(args[0]||'host')} port 22: Connection refused</span>`); break;
+        case 'nmap':       appendEntry(trimmed, '<span class="o-muted">Starting Nmap...\n<span class="o-red">You wish.</span></span>'); break;
+        case 'exit':       appendEntry(trimmed, '<span class="o-muted">There is no escaping this portfolio.</span>'); break;
+        case 'date':       appendEntry(trimmed, `<span class="o-white">${new Date().toString()}</span>`); break;
+        case 'uname':      appendEntry(trimmed, '<span class="o-white">PortfolioOS 2026.1 nate-portfolio x86_64</span>'); break;
+        case 'echo':       appendEntry(trimmed, `<span class="o-white">${escHtml(args.join(' '))}</span>`); break;
+        case 'open':       appendEntry(trimmed, handleCat(args)); break; // alias
+        case 'ls-la':      appendEntry(trimmed, handleLs(['-la'])); break;
+
+        default:
+          appendEntry(trimmed, `<span class="o-muted">bash: ${escHtml(cmd)}: command not found &nbsp; (try <span class="o-green">help</span>)</span>`);
+      }
+    }
+
+    /* ══════════════════════════════════════════
+       INPUT HANDLING
+    ══════════════════════════════════════════ */
+    termInput.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') {
+        const val = this.value;
+        this.value = '';
+        runCommand(val);
+
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        if (histIdx < cmdHist.length - 1) { histIdx++; this.value = cmdHist[cmdHist.length-1-histIdx]; }
+
+      } else if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        if (histIdx > 0) { histIdx--; this.value = cmdHist[cmdHist.length-1-histIdx]; }
+        else { histIdx = -1; this.value = ''; }
+
+      } else if (e.key === 'Tab') {
+        e.preventDefault();
+        const val   = this.value;
+        const parts = val.trimStart().split(/\s+/);
+        const cmd   = parts[0];
+
+        // only complete filenames when we have a command that takes one
+        if (parts.length < 2 && !['cd','cat','ls','ll','open'].includes(cmd.toLowerCase())) return;
+
+        const partial = parts.length >= 2 ? parts[parts.length-1] : '';
+        const matches = getCompletions(partial);
+
+        if (matches.length === 1) {
+          const node   = getCurrent().children[matches[0]];
+          const suffix = node.type === 'dir' ? '/' : ' ';
+          parts[Math.max(parts.length-1, 1)] = matches[0] + suffix;
+          this.value = parts.join(' ');
+
+        } else if (matches.length > 1) {
+          // show completions, re-echo prompt line
+          appendEntry(val, matches.map(m => {
+            const n = getCurrent().children[m];
+            return colorName(m, n);
+          }).join('    '));
+        }
+      }
+    });
+
+    /* Click overlay to focus input */
+    document.getElementById('term-overlay').addEventListener('click', () => termInput.focus());
+
+    /* ESC closes terminal */
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && document.getElementById('term-overlay').classList.contains('active')) openGUI();
+    });
+
+    /* ══════════════════════════════════════════
+       MODE SWITCHING
+    ══════════════════════════════════════════ */
+    function openGUI() {
+      document.getElementById('term-overlay').classList.remove('active');
+    }
+
+    function openTerminal() {
+      document.getElementById('term-overlay').classList.add('active');
+      setTimeout(() => termInput.focus(), 80);
+    }
+
+    /* ══════════════════════════════════════════
+       BOOT SEQUENCE
+    ══════════════════════════════════════════ */
+    const ASCII = `
+ ███╗   ██╗ █████╗ ████████╗███████╗
+ ████╗  ██║██╔══██╗╚══██╔══╝██╔════╝
+ ██╔██╗ ██║███████║   ██║   █████╗
+ ██║╚██╗██║██╔══██║   ██║   ██╔══╝
+ ██║ ╚████║██║  ██║   ██║   ███████╗
+ ╚═╝  ╚═══╝╚═╝  ╚═╝   ╚═╝   ╚══════╝`;
+
+    function boot() {
+      const now  = new Date();
+      const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+      const mons = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      const dateStr = `${days[now.getDay()]} ${mons[now.getMonth()]} ${now.getDate()} ${now.getFullYear()} ${now.toLocaleTimeString()}`;
+
+      const header = document.createElement('div');
+      header.innerHTML = `
+        <span class="term-ascii">${ASCII}</span>
+        <div class="term-sys-line" style="color:#1e1e1e">──────────────────────────────────────────────────────</div>
+        <div class="term-sys-line" style="color:#2a2a2a">PortfolioOS 2026.1  (nate-portfolio/x86_64)</div>
+        <div class="term-sys-line" style="color:#2a2a2a">Last login: ${dateStr}</div>
+        <br>
+      `;
+      termBody.appendChild(header);
+
+      // auto-run ls on boot
+      setTimeout(() => {
+        appendEntry('ls', lsSimple(FS, false));
+        appendBlank();
+        refreshPromptLabel();
+        termInput.focus();
+      }, 200);
+    }
+
+    refreshPromptLabel();
+    boot();
+  </script>
+
+</body>
+</html>
